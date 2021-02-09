@@ -20,7 +20,7 @@ function evaluarCantidadDeIntegrantes($numeroDeItegrantes) {
         errorDeIntegrante = 'El campo de integrantes debe ser distinto de cero';
         mostrarErrorDeIntegrantesAlUsuario(errorDeIntegrante);
         resetearPrograma();
-        return 'Este campo debe ser distinto de cero';
+        return 'El campo de integrantes debe ser distinto de cero';
     } else if ($numeroDeItegrantes < 0) {
         errorDeIntegrante = 'El campo de integrantes debe incluir un numero positivo mayor a cero';
         mostrarErrorDeIntegrantesAlUsuario(errorDeIntegrante);
@@ -109,21 +109,23 @@ function evaluarEdadDeLosIntegrantes($conjuntoDeEdades) {
     $conjuntoDeEdades.forEach(function (edad) {
         let numeroEdad = Number(edad.value);
         if (numeroEdad === 0) {
-            errorDeEdades = 'El campo de edades debe ser distinto de cero'
+            errorDeEdades = 'El campo de edades debe ser distinto de cero';
             mostrarErroresDeEdadesAlUsuario(errorDeEdades);
             resetearPrograma();
             return 'El campo de edades debe ser distinto de cero';
         } else if (numeroEdad < 0) {
-            errorDeEdades = 'El campo de edades debe incluir un numero positivo mayor a cero'
+            errorDeEdades = 'El campo de edades debe incluir un numero positivo mayor a cero';
             mostrarErroresDeEdadesAlUsuario(errorDeEdades);
             resetearPrograma();
             return 'El campo de edades debe incluir un numero positivo mayor a cero';
         } else {
+            errorDeEdades = '';
             ocultarCartelesDeError();
             ejecutarPrograma($conjuntoDeEdades);
             return '';
         }
     });
+    return errorDeEdades;
 }
 
 function mostrarErroresDeEdadesAlUsuario(errorDeEdades) {
