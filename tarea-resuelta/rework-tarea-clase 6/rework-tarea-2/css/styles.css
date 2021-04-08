@@ -1,0 +1,39 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    line-height: normal;
+}
+
+
+body {
+	background-color: #e6d74dea;
+	font-family: 'Roboto', sans-serif;
+	text-align: center;
+    color: rgb(56, 51, 51);
+}
+
+head {
+    font: small-caps 100%/200% serif; 
+}
+
+.integrante {
+	line-height : 30px;
+}
+
+section{
+	margin: 50px auto;
+	width: 35%;
+	padding: 35px;
+	background-color: rgb(243, 243, 229);
+	border-radius: 10px;
+	text-align: left;
+}
+
+.oculto{
+	display: none;
+	line-height : 30px;
+}
+
+#contenedor-de-botones {
+	margin-top: 50px;
+}
