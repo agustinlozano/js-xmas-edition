@@ -21,7 +21,7 @@ head {
 }
 
 section{
-	margin: 40px auto;
+	margin: 50px auto;
 	width: 35%;
 	padding: 35px;
 	background-color: rgb(243, 243, 229);
@@ -32,4 +32,8 @@ section{
 .oculto{
 	display: none;
 	line-height : 30px;
+}
+
+#contenedor-de-botones {
+	margin-top: 50px;
 }
