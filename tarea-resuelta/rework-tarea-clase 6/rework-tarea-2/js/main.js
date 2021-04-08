@@ -1,11 +1,11 @@
 let contadorIntegrantes = 0;
 
 document.querySelector('#agregar-integrante').onclick = function (event) {
-    crearNuevoIntegrante(contadorIntegrantes);
-    mostrarEquisElemento('contenedor-total-integrantes', '');
-    mostrarEquisElemento('realizar-calculos', '');
-
     event.preventDefault();
+
+    crearNuevoIntegrante(contadorIntegrantes);
+    mostrarElemento('contenedor-total-integrantes');
+    mostrarElemento('realizar-calculos');
 }
 
 function crearNuevoIntegrante(contadorIntegrantes) {
@@ -41,9 +41,9 @@ function incrementarCantidadIntegrates() {
 }
 
 document.querySelector('#quitar-integrante').onclick = function (event) {
-    quitarUltimoIntegrante();
-
     event.preventDefault();
+
+    quitarUltimoIntegrante();
 }
 
 function quitarUltimoIntegrante() {
@@ -51,41 +51,44 @@ function quitarUltimoIntegrante() {
     if (contadorIntegrantes > 0) {
         contadorIntegrantes = contadorIntegrantes - 1;
         $integrantes[contadorIntegrantes].remove();
-    } else {
-        ocultarEquisElemento('realizar-calculos', 'oculto');
-        return false;
     }
+
+    if (contadorIntegrantes === 0) {
+        ocultarElemento('realizar-calculos');
+    }
+
+    return false;
 }
 
 document.querySelector('#realizar-calculos').onclick = function (event) {
-    let arrayDeSalariosAnuales = [];
-    let arrayDeSalariosMensuales = [];
-    pushearSalariosDeLosIntegrantes(arrayDeSalariosAnuales);
-    const resultadoDeValidacion = validarSalariosAnualesIngresados(arrayDeSalariosAnuales);
-    if (resultadoDeValidacion === 'No hubo error') {
-        calcularSalariosMensuales(arrayDeSalariosAnuales, arrayDeSalariosMensuales);
-        llamarFucionesDeCalculos(arrayDeSalariosAnuales, arrayDeSalariosMensuales);
-        mostrarEquisElemento('reset', '');
-    } else {
-        mostrarEquisElemento('reset', '');
-    }
-
     event.preventDefault();
+
+    let salariosAnuales = [];
+    let salariosMensuales = [];
+    pushearSalariosDeLosIntegrantes(salariosAnuales);
+    const resultadoDeValidacion = validarSalariosAnualesIngresados(salariosAnuales);
+    if (resultadoDeValidacion === 'No hubo error') {
+        calcularSalariosMensuales(salariosAnuales, salariosMensuales);
+        llamarFucionesDeCalculos(salariosAnuales, salariosMensuales);
+        mostrarElemento('reset');
+    } else {
+        mostrarElemento('reset');
+    }
 }
 
-function pushearSalariosDeLosIntegrantes(arrayDeSalariosAnuales) {
+function pushearSalariosDeLosIntegrantes(salariosAnuales) {
     const $integrantes = document.querySelectorAll('.salario-integrante');
     for (let i = 0; i < $integrantes.length; i++) {
         let evaluarElemento = $integrantes[i];
         if (evaluarElemento.value !== '') {
-            arrayDeSalariosAnuales.push(Number(evaluarElemento.value));
+            salariosAnuales.push(Number(evaluarElemento.value));
         }
     }
-    return arrayDeSalariosAnuales;
+    return salariosAnuales;
 }
 
-function validarSalariosAnualesIngresados(arrayDeSalariosAnuales) {
-    let resultadoDeValidacion = evaluarConjuntoDeSalariosAnuales(arrayDeSalariosAnuales);
+function validarSalariosAnualesIngresados(salariosAnuales) {
+    let resultadoDeValidacion = evaluarConjuntoDeSalariosAnuales(salariosAnuales);
     document.querySelector('#error').textContent = resultadoDeValidacion;
     document.querySelector('#error').className = '';
     return resultadoDeValidacion;
@@ -99,13 +102,13 @@ function borrarIntegrantes() {
     });
 }
 
-function evaluarConjuntoDeSalariosAnuales(arrayDeSalariosAnuales) {
+function evaluarConjuntoDeSalariosAnuales(salariosAnuales) {
     let condicionFinalDeLaEvaluacion;
-    for (let i = 0; i < arrayDeSalariosAnuales.length; i++) {
-        let salario = arrayDeSalariosAnuales[i];
+    for (let i = 0; i < salariosAnuales.length; i++) {
+        let salario = salariosAnuales[i];
         if (!/^[0-9]+$/.test(salario)) {
             condicionFinalDeLaEvaluacion = 'Los campos de salarios deben contener números naturales';
-            resetearPrograma(arrayDeSalariosAnuales);
+            resetearPrograma(salariosAnuales);
             break;
         } else {
             condicionFinalDeLaEvaluacion = 'No hubo error';
@@ -114,34 +117,34 @@ function evaluarConjuntoDeSalariosAnuales(arrayDeSalariosAnuales) {
     return condicionFinalDeLaEvaluacion;
 }
 
-function resetearPrograma(arrayDeSalariosAnuales) {
+function resetearPrograma(salariosAnuales) {
     reiniciarContadorDeIntegrantes();
     borrarIntegrantes();
-    ocultarEquisElemento('respuestas', 'oculto');
-    ocultarEquisElemento('realizar-calculos', 'oculto');
-    return arrayDeSalariosAnuales;
+    ocultarElemento('respuestas');
+    ocultarElemento('realizar-calculos');
+    return salariosAnuales;
 }
 
 function reiniciarContadorDeIntegrantes() {
     contadorIntegrantes = 0;
 }
 
-function calcularSalariosMensuales(arrayDeSalariosAnuales, arrayDeSalariosMensuales) {
-    for (let i = 0; i < arrayDeSalariosAnuales.length; i++) {
+function calcularSalariosMensuales(salariosAnuales, salariosMensuales) {
+    for (let i = 0; i < salariosAnuales.length; i++) {
         const mesesDelAño = 12;
-        let elementoDeArray = arrayDeSalariosAnuales[i];
+        let elementoDeArray = salariosAnuales[i];
         let salarioMensual = elementoDeArray / mesesDelAño;
-        arrayDeSalariosMensuales.push(Math.round(salarioMensual));
+        salariosMensuales.push(Math.round(salarioMensual));
     }
-    return arrayDeSalariosMensuales;
+    return salariosMensuales;
 }
 
-function llamarFucionesDeCalculos(arrayDeSalariosAnuales, arrayDeSalariosMensuales) {
-    mostrarSalarios('mayor', calcularMayorSalario(arrayDeSalariosAnuales));
-    mostrarSalarios('menor', calcularMenorSalario(arrayDeSalariosAnuales));
-    mostrarPromedios('salario-anual', calcularPromedio(arrayDeSalariosAnuales));
-    mostrarPromedios('salario-mensual', calcularPromedio(arrayDeSalariosMensuales));
-    mostrarEquisElemento('respuestas', '');
+function llamarFucionesDeCalculos(salariosAnuales, salariosMensuales) {
+    mostrarSalarios('mayor', calcularMayorSalario(salariosAnuales));
+    mostrarSalarios('menor', calcularMenorSalario(salariosAnuales));
+    mostrarPromedios('salario-anual', calcularPromedio(salariosAnuales));
+    mostrarPromedios('salario-mensual', calcularPromedio(salariosMensuales));
+    mostrarElemento('respuestas');
 }
 
 function mostrarSalarios(tipo, valor) {
@@ -154,17 +157,17 @@ function mostrarPromedios(tipo, valor) {
 
 //Funciones dinámicas para mostrar/ocultar
 
-function mostrarEquisElemento(tipo, valor) {
-    document.querySelector(`#${tipo}`).className = valor;
+function mostrarElemento(idElemento) {
+    document.querySelector(`#${idElemento}`).className = "";
 }
 
-function ocultarEquisElemento(tipo, valor) {
-    document.querySelector(`#${tipo}`).className = valor;
+function ocultarElemento(idElemento) {
+    document.querySelector(`#${idElemento}`).className = "oculto";
 }
 
 document.querySelector('#reset').onclick = function (event) {
-    resetearPrograma();
-    ocultarEquisElemento('error', 'oculto');
-
     event.preventDefault();
+
+    resetearPrograma();
+    ocultarElemento('error');
 }
