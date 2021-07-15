@@ -35,6 +35,10 @@ function validarDescripcionRegalo(descripcionRegalo) {
 }
 
 function validarFormulario(event) {
+    event.preventDefault();
+    
+    borrarErrores();
+
     const $form = document.querySelector("#carta-a-santa");
 
     const nombre = $form.nombre.value;
@@ -56,22 +60,37 @@ function validarFormulario(event) {
     if (esExito) {
         $form.className = 'oculto';
         document.querySelector('#exito').className = '';
+
+        setTimeout(function(){
+            window.location.href = '../wishlist.html';
+        },5000);
     }
 
-    event.preventDefault();
+
+}
+
+function borrarErrores() {
+    const $errores = document.querySelector('#errores');
+    
+    if ($errores.childElementCount !== 0) {
+        $errores.querySelectorAll('li').forEach(function(li){
+            li.remove();
+        });
+    }
 }
 
 function manejarErrores(errores) {
     const keys = Object.keys(errores);
     const $errores = document.querySelector('#errores');
     let cantidadDeErrores = 0;
-    
+
     keys.forEach(function (key) {
         const error = errores[key];
 
         if (error) {
             cantidadDeErrores++;
             $form[key].className = 'error';
+
             const $error = document.createElement('li');
             $error.innerText = error;
 
